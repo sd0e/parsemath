@@ -42,13 +42,6 @@ class Stack {
 	}
 }
 
-// const tempArr = new Stack();
-// tempArr.push(1);
-// tempArr.push(2);
-// tempArr.push(3);
-// tempArr.push(4);
-// console.log(tempArr.peek(1));
-
 // lower number means higher precendence
 const precedences = {
 	"^": 0,
@@ -62,14 +55,6 @@ const isOperator = string => string in precedences;
 const isInteger = string => /^\d+$/.test(string);
 
 const MAXIMUM_PRECEDENCE = 3;
-
-// const hasHigherPrecedence = (operator, comparator) => {
-// 	if (isOperator(operator) && isOperator(comparator)) {
-// 		return precedences[operator] < precedences[comparator];
-// 	} else {
-// 		return false;
-// 	}
-// }
 
 const performCalculation = (number1, number2, operator) => {
 	switch (operator) {
@@ -87,68 +72,6 @@ const performCalculation = (number1, number2, operator) => {
 
 	return null;
 }
-
-// // for example, equation is 5 * 6 / 7 + 8
-// export default function ParseMath(equation) {
-// 	const equationValues = equation.split('');
-
-// 	const numbers = new Stack();
-// 	const operators = new Stack();
-
-// 	equationValues.forEach(equationValue => {
-// 		if (equationValue != ' ') {
-// 			if (isOperator(equationValue)) {
-// 				// part of equation is an operator
-// 				if (hasHigherPrecedence(operators.peek(), equationValue)) {
-// 					const equationOperator = operators.pop();
-// 					const number2 = numbers.pop();
-// 					const number1 = numbers.pop();
-// 					numbers.push(performCalculation(parseFloat(number1), parseFloat(number2), equationOperator));
-// 				}
-// 				operators.push(equationValue);
-// 			} else if (isInteger(equationValue)) {
-// 				// part of equation is an integer
-// 				numbers.push(equationValue);
-// 			}
-// 		}
-// 	});
-
-// 	console.log(numbers, operators);
-// }
-
-// // for example, equation is 5 * 6 / 7 + 8
-// export default function ParseMath(equation) {
-// 	const equationValues = equation.split('');
-
-// 	const numbers = new Stack();
-// 	const operators = new Stack();
-
-// 	// format: [isAwaitingCalculation, number1, operator]
-// 	let awaitingCalculation = [false, null, null];
-
-// 	equationValues.forEach(equationValue => {
-// 		if (equationValue != ' ') {
-// 			if (isOperator(equationValue)) {
-// 				// part of equation is an operator
-// 				if (hasHigherPrecedence(operators.peek(), equationValue)) {
-// 					const equationOperator = operators.pop();
-// 					const number1 = numbers.pop();
-// 					awaitingCalculation = [true, number1, equationOperator];
-// 				}
-// 				operators.push(equationValue);
-// 			} else if (isInteger(equationValue)) {
-// 				// part of equation is an integer
-// 				if (awaitingCalculation[0] === true) {
-// 					numbers.push(performCalculation(parseFloat(awaitingCalculation[1]), parseFloat(equationValue), awaitingCalculation[2]).toString());
-// 				} else {
-// 					numbers.push(equationValue);
-// 				}
-// 			}
-// 		}
-// 	});
-
-// 	console.log(numbers, operators);
-// }
 
 // for example, equation is 5 * 6 / 7 + 8
 export default function ParseMath(equation) {
@@ -196,4 +119,4 @@ export default function ParseMath(equation) {
 	return numbers.pop();
 }
 
-console.log(ParseMath('3*6^2 - 5*6 + 3'));
+// console.log(ParseMath('3*6^2 - 5*6 + 3'));
