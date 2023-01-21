@@ -108,7 +108,20 @@ const removeInnerBrackets = equation => {
 	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
 	const extractedEquationResult = ParseMath(extractedEquation);
 
-	const fullResult = equation.substring(0, firstBracketIdx) + extractedEquationResult + equation.substring(lastBracketIdx + 1, equation.length);
+	let firstPart = equation.substring(0, firstBracketIdx);
+	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
+
+	if (isInteger(firstPart.charAt(firstPart.length - 1))) {
+		// character before bracket is number, so implied multiplication
+		firstPart += '*';
+	}
+
+	if (isInteger(lastPart.charAt(0))) {
+		// character after bracket is number, so implied multiplication
+		lastPart = '*' + lastPart;
+	}
+
+	const fullResult = firstPart + extractedEquationResult + lastPart;
 	console.log(equation, fullResult);
 
 	return fullResult;
@@ -193,5 +206,6 @@ export default function ParseMath(equation) {
 	return numbers.pop();
 }
 
+// console.log(ParseMath('3.2^(9 * (8 + 3))'));
 // console.log(ParseMath('3*6^2 - 5*6 + 3'));
-console.log(ParseMath('3.2^(9 * (8 + 3))'));
+// console.log(ParseMath('3(6)^2 - 5(6) + 3'));
