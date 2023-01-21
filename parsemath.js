@@ -51,8 +51,16 @@ const precedences = {
 	"-": 2
 };
 
+const brackets = {
+	"(": 1,
+	")": -1,
+	"[": 1,
+	"]": -1
+}
+
 const isOperator = string => string in precedences;
 const isInteger = string => /^\d+$/.test(string);
+const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
 
@@ -73,21 +81,87 @@ const performCalculation = (number1, number2, operator) => {
 	return null;
 }
 
+const removeInnerBrackets = equation => {
+	const equationValues = equation.split('');
+	let previousBracketValue = 0;
+	let maxDepth = -1;
+	let firstBracketIdx = -1;
+	let lastBracketIdx = -1;
+
+	equationValues.forEach((equationValue, idx) => {
+		const bracketValue = isBracket(equationValue);
+
+		if (bracketValue[0]) {
+			const currentValue = previousBracketValue + bracketValue[1];
+
+			if (currentValue > maxDepth && lastBracketIdx === -1) {
+				maxDepth = currentValue;
+				firstBracketIdx = idx;
+			} else if (previousBracketValue === maxDepth && currentValue < maxDepth && lastBracketIdx === -1) {
+				lastBracketIdx = idx;
+			}
+
+			previousBracketValue = currentValue;
+		}
+	});
+
+	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
+	const extractedEquationResult = ParseMath(extractedEquation);
+
+	const fullResult = equation.substring(0, firstBracketIdx) + extractedEquationResult + equation.substring(lastBracketIdx + 1, equation.length);
+	console.log(equation, fullResult);
+
+	return fullResult;
+}
+
+const containsBracket = equation => {
+	let containsBracket = false;
+	Object.keys(brackets).forEach(bracket => {
+		if (equation.includes(bracket)) {
+			containsBracket = true;
+		}
+	});
+
+	return containsBracket;
+}
+
 // for example, equation is 5 * 6 / 7 + 8
 export default function ParseMath(equation) {
+	while (containsBracket(equation)) {
+		equation = removeInnerBrackets(equation);
+	}
+
 	const equationValues = equation.split('');
 
 	const numbers = new Stack();
 	const operators = new Stack();
+	const pendingNumbers = new Stack();
 
-	equationValues.forEach(equationValue => {
+	equationValues.forEach((equationValue, idx) => {
 		if (equationValue != ' ') {
 			if (isOperator(equationValue)) {
 				// part of equation is an operator
 				operators.push(equationValue);
 			} else if (isInteger(equationValue)) {
 				// part of equation is an integer
-				numbers.push(equationValue);
+				if (idx !== equation.length - 1 && (isInteger(equation.charAt(idx + 1)) || equation.charAt(idx + 1) === '.')) {
+					// not end of equation string and next character is number or decimal point, so treat as one
+					pendingNumbers.push(equationValue)
+				} else if (idx !== 0 && (isInteger(equation.charAt(idx - 1)) || equation.charAt(idx - 1) === '.')) {
+					// not start of equation string, next character is not number but previous number is
+					pendingNumbers.push(equationValue);
+
+					let resultingNumberString = '';
+					while (!pendingNumbers.isEmpty()) {
+						resultingNumberString += pendingNumbers.pop(0);
+					}
+
+					numbers.push(resultingNumberString);
+				} else {
+					numbers.push(equationValue);
+				}
+			} else if (equationValue === '.') {
+				pendingNumbers.push('.');
 			}
 		}
 	});
@@ -120,3 +194,4 @@ export default function ParseMath(equation) {
 }
 
 // console.log(ParseMath('3*6^2 - 5*6 + 3'));
+console.log(ParseMath('3.2^(9 * (8 + 3))'));
