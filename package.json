@@ -1,0 +1,20 @@
+{
+  "name": "parsemath",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Evaluate mathematical expressions in JS",
+  "main": "parsemath.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sd0e/parsemath.git"
+  },
+  "author": "sdoe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sd0e/parsemath/issues"
+  },
+  "homepage": "https://github.com/sd0e/parsemath#readme"
+}
