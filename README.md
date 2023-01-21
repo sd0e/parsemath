@@ -6,6 +6,7 @@ A JavaScript library which parses an equation in string format to a number.
 
 Current abilities:
 * Evaluate mathematical expressions with the following operators: `^`, `*`, `/`, `+`, `-`
+* Evaluate mathematical expressions with the following operators containing a number inside the brackets: `sqrt()`
 * Evaluate mathematical expressions with brackets
 * Evaluate mathematical expressions containing multi-digit integers and floats
 

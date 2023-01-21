@@ -64,7 +64,7 @@ const isBracket = string => string in brackets ? [true, brackets[string]] : [fal
 
 const MAXIMUM_PRECEDENCE = 3;
 
-const performCalculation = (number1, number2, operator) => {
+const performCalculation = (number1, operator, number2 = 0) => {
 	switch (operator) {
 		case '^':
 			return number1**number2
@@ -76,6 +76,8 @@ const performCalculation = (number1, number2, operator) => {
 			return number1+number2
 		case '-':
 			return number1-number2
+		case 'sqrt':
+			return Math.sqrt(number1)
 	}
 
 	return null;
@@ -106,7 +108,7 @@ const removeInnerBrackets = equation => {
 	});
 
 	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
-	const extractedEquationResult = ParseMath(extractedEquation);
+	let extractedEquationResult = ParseMath(extractedEquation);
 
 	let firstPart = equation.substring(0, firstBracketIdx);
 	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
@@ -114,7 +116,11 @@ const removeInnerBrackets = equation => {
 	if (isInteger(firstPart.charAt(firstPart.length - 1))) {
 		// character before bracket is number, so implied multiplication
 		firstPart += '*';
-	}
+	} else if (firstPart.substring(firstPart.length - 4, firstPart.length) === 'sqrt') {
+		// wants the content inside the bracket to be square rooted
+		firstPart = firstPart.substring(0, firstPart.length - 4);
+		extractedEquationResult = performCalculation(extractedEquationResult, 'sqrt');
+	};
 
 	if (isInteger(lastPart.charAt(0))) {
 		// character after bracket is number, so implied multiplication
@@ -196,7 +202,7 @@ export default function ParseMath(equation) {
 			}
 		}
 
-		const resultingNumber = performCalculation(parseFloat(numbers.peek(operatorIndexes[0])), parseFloat(numbers.peek(operatorIndexes[1])), highestOperator);
+		const resultingNumber = performCalculation(parseFloat(numbers.peek(operatorIndexes[0])), highestOperator, parseFloat(numbers.peek(operatorIndexes[1])));
 		numbers.pop(operatorIndexes[1]);
 		numbers.replace(operatorIndexes[0], resultingNumber.toString());
 		operators.pop(highestOperatorIndex);
@@ -208,3 +214,4 @@ export default function ParseMath(equation) {
 // console.log(ParseMath('3.2^(9 * (8 + 3))'));
 // console.log(ParseMath('3*6^2 - 5*6 + 3'));
 // console.log(ParseMath('3(6)^2 - 5(6) + 3'));
+// console.log(ParseMath('5 + sqrt(sqrt(5 * 6))'));
