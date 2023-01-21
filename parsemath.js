@@ -122,7 +122,6 @@ const removeInnerBrackets = equation => {
 	}
 
 	const fullResult = firstPart + extractedEquationResult + lastPart;
-	console.log(equation, fullResult);
 
 	return fullResult;
 }
