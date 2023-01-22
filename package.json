@@ -11,7 +11,7 @@
     "url": "git+https://github.com/sd0e/parsemath.git"
   },
   "author": "sdoe",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sd0e/parsemath/issues"
   },
