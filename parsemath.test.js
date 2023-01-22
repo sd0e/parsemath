@@ -100,6 +100,10 @@ test('two trigonometric functions with implied multiplication both before and af
 	expect(Number(ParseMath('3sin(0.5)cos(0.5)').toFixed(3))).toBe(1.262);
 });
 
+test('three sequential functions', () => {
+	expect(Number(ParseMath('sqrt(5)sin(0.5)cos(0.5)').toFixed(3))).toBe(0.941);
+});
+
 test('multiple sequential brackets', () => {
 	expect(Number(ParseMath('5 + (9)(8)'))).toBe(77);
 });
