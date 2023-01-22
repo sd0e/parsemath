@@ -4,13 +4,49 @@
 
 A JavaScript library which parses an equation in string format to a number.
 
-Current abilities:
+## Current abilities
 * Evaluate mathematical expressions with the following operators: `^`, `*`, `/`, `+`, `-`
 * Evaluate mathematical expressions with the following operators containing a number inside the brackets, with **trigonometric values represented in radians**: `sqrt()`, `sin()`, `cos()`, `tan()`
 * Evaluate mathematical expressions with brackets
 * Evaluate mathematical expressions containing multi-digit positive and negative integers and floats
 * Evaluate mathematical expressions involving the mathematical constants `e` and `π` (the `enableConstants` parameter must be set to true for this to work)
-* Evaluate mathematical expressions involving variables in the Roman and Greek alphabets.
+* Evaluate mathematical expressions involving variables in the Roman and Greek alphabets
+
+## Usage
+The function accepts the following arguments in their respective order:
+* **equation** (*string*): the equation to be parsed
+* **enableConstants** (*boolean*, default is `true`): whether to enable the mathematical constants `e` and `π` when parsing equation
+* **variables** (*object*, default is `null`): any custom variables to be used when parsing equation
+
+#### Example `variables` object
+```js
+{
+    "x": 0,
+    "y": -4.3
+}
+```
+
+## Examples
+#### Simple Equation
+```js
+ParseMath('5 + 3 * 6 / 2') // 14
+```
+
+#### Equation with Constants
+```js
+Number(ParseMath('3e').toFixed(3)) // 8.155
+```
+
+#### Equation with Custom Variables
+```js
+ParseMath('3x^2 - 5x + 3', true, {"x": 6}) // 81
+```
+
+#### Equation with Trigonometric Function
+
+```js
+Number(ParseMath('5*1-(sin(2)*tan(2))').toFixed(3)) // 6.987
+```
 
 Note that this library has the standard JavaScript floating point math issue where there are occasionally inaccurate results, such as `0.1 + 0.2 = 0.30000000000000004`. This can be resolved by the user by rounding the answer to an appropriate number of decimal places.
 

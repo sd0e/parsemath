@@ -56,6 +56,10 @@ test('polynomial with negative variable', () => {
 	expect(ParseMath('3x^2 - 5x + 3', true, {"x": -6})).toBe(141);
 });
 
+test('polynomial with negative decimal variable', () => {
+	expect(Number(ParseMath('3x^2 - 5x + 3', true, {"x": -6.2}).toFixed(2))).toBe(149.32);
+});
+
 test('very large power with brackets', () => {
 	expect(ParseMath('3.2^(9 * (8 + 3))')).toBe(1.02293456496755e+50);
 });
@@ -114,6 +118,10 @@ test('arcsin, arccos and arctan', () => {
 
 test('single variable by itself in equation', () => {
 	expect(Number(ParseMath('e * 3').toFixed(3))).toBe(8.155);
+});
+
+test('single variable by itself in equation with implied multiplication', () => {
+	expect(Number(ParseMath('3e').toFixed(3))).toBe(8.155);
 });
 
 test('custom variables', () => {
