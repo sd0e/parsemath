@@ -93,5 +93,13 @@ test('custom variables', () => {
 });
 
 test('raise to power of a negative', () => {
-	expect(Number(ParseMath('4^-2'))).toBe(0.0625);
+	expect(Number(ParseMath('4^-2', true))).toBe(0.0625);
+});
+
+test('raise to power of brackets', () => {
+	expect(Number(ParseMath('4^(e + 3)', true).toFixed(3))).toBe(2771.716);
+});
+
+test('two variables in single bracket', () => {
+	expect(Number(ParseMath('4^(e + e)', true).toFixed(3))).toBe(1875.588);
 });

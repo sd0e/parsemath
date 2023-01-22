@@ -64,10 +64,11 @@ const isLetter = string => /[a-z]/.test(string);
 const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
-let VARIABLES = {
+const CONSTANTS = {
 	"e": Math.E,
 	"π": Math.PI,
-};
+}
+let VARIABLES = CONSTANTS;
 
 const performCalculation = (number1, operator, number2 = 0) => {
 	switch (operator) {
@@ -139,7 +140,7 @@ const containsFinalString = firstPart => {
 	}
 }
 
-const removeInnerBrackets = equation => {
+const removeInnerBrackets = (equation, enableConstants, variables) => {
 	const equationValues = equation.split('');
 	let previousBracketValue = 0;
 	let maxDepth = -1;
@@ -164,7 +165,7 @@ const removeInnerBrackets = equation => {
 	});
 
 	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
-	let extractedEquationResult = ParseMath(extractedEquation);
+	let extractedEquationResult = ParseMath(extractedEquation, enableConstants, variables);
 
 	let firstPart = equation.substring(0, firstBracketIdx);
 	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
@@ -201,7 +202,10 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 	equation = equation.replace(/\s/g, '');
 
 	// update variables
-	if (!enableConstants) VARIABLES = {};
+	if (!enableConstants) VARIABLES = {}
+	else if (enableConstants) {
+		VARIABLES = CONSTANTS;
+	}
 
 	if (variables !== null && typeof variables === 'object') {
 		Object.keys(variables).forEach(variableKey => {
@@ -210,7 +214,7 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 	}
 
 	while (containsBracket(equation)) {
-		equation = removeInnerBrackets(equation);
+		equation = removeInnerBrackets(equation, enableConstants, variables);
 	}
 
 	const equationValues = equation.split('');
@@ -289,8 +293,9 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 		numbers.replace(operatorIndexes[0], resultingNumber.toString());
 		operators.pop(highestOperatorIndex);
 	}
-	
-	return Number(numbers.pop());
+
+	const result = Number(numbers.pop());
+	return result;
 }
 
 module.exports = ParseMath;
