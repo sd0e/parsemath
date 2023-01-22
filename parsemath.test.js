@@ -36,6 +36,18 @@ test('polynomial with variable', () => {
 	expect(ParseMath('3x^2 - 5x + 3', true, {"x": 6})).toBe(81);
 });
 
+test('polynomial with variable in Greek alphabet', () => {
+	expect(ParseMath('3δ^2 - 5δ + 3', true, {"δ": 6})).toBe(81);
+});
+
+test('polynomial with decimal variable', () => {
+	expect(Number(ParseMath('3x^2 - 5x + 3', true, {"x": 6.2}).toFixed(2))).toBe(87.32);
+});
+
+test('polynomial with negative variable', () => {
+	expect(ParseMath('3x^2 - 5x + 3', true, {"x": -6})).toBe(141);
+});
+
 test('very large power with brackets', () => {
 	expect(ParseMath('3.2^(9 * (8 + 3))')).toBe(1.02293456496755e+50);
 });
@@ -122,4 +134,20 @@ test('multiple sequential variables and constants', () => {
 
 test('treating constant as function', () => {
 	expect(Number(ParseMath('e(3)', true).toFixed(3))).toBe(8.155);
+});
+
+test('simple multiplication with pi', () => {
+	expect(Number(ParseMath('π * 3', true).toFixed(3))).toBe(9.425);
+});
+
+test('bracket implied multiplication with pi', () => {
+	expect(Number(ParseMath('π(3)', true).toFixed(3))).toBe(9.425);
+});
+
+test('using constant as a variable value', () => {
+	expect(Number(ParseMath('3x', true, {"x": "π"}).toFixed(3))).toBe(9.425);
+});
+
+test('multiple sequential variables with implied multiplication', () => {
+	expect(Number(ParseMath('8eπ(3^2)').toFixed(3))).toBe(614.861);
 });

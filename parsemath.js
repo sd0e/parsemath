@@ -60,7 +60,7 @@ const brackets = {
 
 const isOperator = string => string in precedences;
 const isInteger = string => /^\d+$/.test(string);
-const isLetter = string => /[a-z]/.test(string);
+const isLetter = string => /[a-zα-ω]/.test(string);
 const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
@@ -236,7 +236,11 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 
 	if (variables !== null && typeof variables === 'object') {
 		Object.keys(variables).forEach(variableKey => {
-			VARIABLES[variableKey] = variables[variableKey];
+			let variableContent = variables[variableKey];
+			if (typeof variableContent === 'string' && variableContent in VARIABLES) {
+				variableContent = VARIABLES[variableContent];
+			}
+			VARIABLES[variableKey] = variableContent;
 		});
 	}
 
@@ -328,7 +332,5 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 	const result = Number(numbers.pop());
 	return result;
 }
-
-console.log(Number(ParseMath('e(3)', true)));
 
 module.exports = ParseMath;
