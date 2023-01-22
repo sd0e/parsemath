@@ -168,9 +168,13 @@ const removeInnerBrackets = equation => {
 	if (isInteger(lastPart.charAt(0))) {
 		// character after bracket is number, so implied multiplication
 		lastPart = '*' + lastPart;
+	} else if (lastPart.charAt(0) === '(') {
+		// character after bracket is another bracket, so multiply together
+		lastPart = '*' + lastPart;
 	}
 
 	const fullResult = firstPart + extractedEquationResult + lastPart;
+	console.log(equation, fullResult);
 
 	return fullResult;
 }
