@@ -71,3 +71,11 @@ test('negative function', () => {
 test('arcsin, arccos and arctan', () => {
 	expect(Number(ParseMath('arcsin(0.2) + arccos(0.4) + arctan(0.6)').toFixed(3))).toBe(1.901);
 });
+
+test('single variable by itself in equation', () => {
+	expect(Number(ParseMath('e * 3').toFixed(3))).toBe(8.155);
+});
+
+test('custom variables', () => {
+	expect(Number(ParseMath('3 * (x / 2)', false, {"x": 4}))).toBe(6);
+});

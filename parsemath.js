@@ -64,6 +64,10 @@ const isLetter = string => /[a-z]/.test(string);
 const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
+let VARIABLES = {
+	"e": Math.E,
+	"π": Math.PI,
+};
 
 const performCalculation = (number1, operator, number2 = 0) => {
 	switch (operator) {
@@ -192,8 +196,18 @@ const removeInnerBrackets = equation => {
 const containsBracket = equation => /[\(\)\[\]]/g.test(equation);
 
 // for example, equation is 5 * 6 / 7 + 8
-function ParseMath(equation) {
+function ParseMath(equation, enableConstants = true, variables = null) {
 	equation = equation.toLowerCase();
+	equation = equation.replace(/\s/g, '');
+
+	// update variables
+	if (!enableConstants) VARIABLES = {};
+
+	if (variables !== null && typeof variables === 'object') {
+		Object.keys(variables).forEach(variableKey => {
+			VARIABLES[variableKey] = variables[variableKey];
+		});
+	}
 
 	while (containsBracket(equation)) {
 		equation = removeInnerBrackets(equation);
@@ -241,6 +255,13 @@ function ParseMath(equation) {
 				prevItem = 'number';
 			} else if (equationValue === '.') {
 				pendingNumbers.push('.');
+			} else if (equationValue in VARIABLES) {
+				if ((idx === 0 || prevItem === 'operator') && (idx === equation.length - 1 || isOperator(equation.charAt(idx + 1)))) {
+					// is variable by itself
+					equationValue = VARIABLES[equationValue].toString();
+					numbers.push(equationValue);
+					prevItem = 'number';
+				}
 			}
 		}
 	});
@@ -271,7 +292,5 @@ function ParseMath(equation) {
 	
 	return Number(numbers.pop());
 }
-
-console.log(ParseMath('arcsin(0.2) + acos(0.4) + atan(0.6)'));
 
 module.exports = ParseMath;
