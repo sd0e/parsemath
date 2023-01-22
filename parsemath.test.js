@@ -36,6 +36,10 @@ test('simple equation with trigonometry', () => {
 	expect(Number(ParseMath('sin(2) + 1').toFixed(3))).toBe(1.909);
 });
 
+test('single cos trigonometric function', () => {
+	expect(Number(ParseMath('cos(2)').toFixed(3))).toBe(-0.416);
+});
+
 test('simple equation with negative trigonometry', () => {
 	expect(Number(ParseMath('sin(-2) + 1').toFixed(3))).toBe(0.091);
 });

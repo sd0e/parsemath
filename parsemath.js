@@ -87,7 +87,6 @@ const performCalculation = (number1, operator, number2 = 0) => {
 			return Math.tan(number1)
 	}
 
-	Math.acos
 	return null;
 }
 
