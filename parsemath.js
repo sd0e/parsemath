@@ -60,6 +60,7 @@ const brackets = {
 
 const isOperator = string => string in precedences;
 const isInteger = string => /^\d+$/.test(string);
+const isLetter = string => /[a-z]/.test(string);
 const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
@@ -78,9 +79,49 @@ const performCalculation = (number1, operator, number2 = 0) => {
 			return number1-number2
 		case 'sqrt':
 			return Math.sqrt(number1)
+		case 'sin':
+			return Math.sin(number1)
+		case 'cos':
+			return Math.cos(number1)
+		case 'tan':
+			return Math.tan(number1)
 	}
 
+	Math.acos
 	return null;
+}
+
+// returns `false` if last letter is not letter, otherwise it returns all final of letters of string
+const containsFinalString = firstPart => {
+	const finalCharacter = firstPart.charAt(firstPart.length - 1);
+	if (!isLetter(finalCharacter)) {
+		return false;
+	} else {
+		if (firstPart.length === 1) {
+			return finalCharacter;
+		} else {
+			let returnString = finalCharacter;
+			let characterIsLetter = true;
+			let currentSearchIndex = firstPart.length - 2
+
+			while (characterIsLetter) {
+				if (isLetter(firstPart.charAt(currentSearchIndex))) {
+					returnString = firstPart.charAt(currentSearchIndex) + returnString;
+
+					if (firstPart.length - 1 === currentSearchIndex) {
+						// reached start of string, return
+						return returnString;
+					} else {
+						currentSearchIndex--;
+					}
+				} else {
+					characterIsLetter = false;
+				}
+			}
+
+			return returnString;
+		}
+	}
 }
 
 const removeInnerBrackets = equation => {
@@ -116,10 +157,12 @@ const removeInnerBrackets = equation => {
 	if (isInteger(firstPart.charAt(firstPart.length - 1))) {
 		// character before bracket is number, so implied multiplication
 		firstPart += '*';
-	} else if (firstPart.substring(firstPart.length - 4, firstPart.length) === 'sqrt') {
-		// wants the content inside the bracket to be square rooted
-		firstPart = firstPart.substring(0, firstPart.length - 4);
-		extractedEquationResult = performCalculation(extractedEquationResult, 'sqrt');
+	} else if (containsFinalString(firstPart)) {
+		// operation to be done to contents of brackets
+		const operation = containsFinalString(firstPart);
+
+		firstPart = firstPart.substring(0, firstPart.length - operation.length);
+		extractedEquationResult = performCalculation(extractedEquationResult, operation);
 	};
 
 	if (isInteger(lastPart.charAt(0))) {
@@ -132,19 +175,12 @@ const removeInnerBrackets = equation => {
 	return fullResult;
 }
 
-const containsBracket = equation => {
-	let containsBracket = false;
-	Object.keys(brackets).forEach(bracket => {
-		if (equation.includes(bracket)) {
-			containsBracket = true;
-		}
-	});
-
-	return containsBracket;
-}
+const containsBracket = equation => /[\(\)\[\]]/g.test(equation);
 
 // for example, equation is 5 * 6 / 7 + 8
-export default function ParseMath(equation) {
+function ParseMath(equation) {
+	equation = equation.toLowerCase();
+
 	while (containsBracket(equation)) {
 		equation = removeInnerBrackets(equation);
 	}
@@ -155,18 +191,27 @@ export default function ParseMath(equation) {
 	const operators = new Stack();
 	const pendingNumbers = new Stack();
 
+	let prevItem = 'operator';
+
 	equationValues.forEach((equationValue, idx) => {
 		if (equationValue != ' ') {
 			if (isOperator(equationValue)) {
-				// part of equation is an operator
-				operators.push(equationValue);
+				if (prevItem === 'operator' && equationValue === '-') {
+					// last item was operator and this is minus, so treat as start of negative number
+					pendingNumbers.push(equationValue);
+					prevItem = 'number';
+				} else {
+					// part of equation is an operator
+					operators.push(equationValue);
+					prevItem = 'operator';
+				}
 			} else if (isInteger(equationValue)) {
 				// part of equation is an integer
 				if (idx !== equation.length - 1 && (isInteger(equation.charAt(idx + 1)) || equation.charAt(idx + 1) === '.')) {
 					// not end of equation string and next character is number or decimal point, so treat as one
-					pendingNumbers.push(equationValue)
-				} else if (idx !== 0 && (isInteger(equation.charAt(idx - 1)) || equation.charAt(idx - 1) === '.')) {
-					// not start of equation string, next character is not number but previous number is
+					pendingNumbers.push(equationValue);
+				} else if (idx !== 0 && (isInteger(equation.charAt(idx - 1)) || equation.charAt(idx - 1) === '.' || (equation.charAt(idx - 1) === '-' && prevItem === 'number'))) {
+					// not start of equation string, next character is not number but previous number is number, decimal point or negative
 					pendingNumbers.push(equationValue);
 
 					let resultingNumberString = '';
@@ -178,6 +223,8 @@ export default function ParseMath(equation) {
 				} else {
 					numbers.push(equationValue);
 				}
+
+				prevItem = 'number';
 			} else if (equationValue === '.') {
 				pendingNumbers.push('.');
 			}
@@ -208,10 +255,7 @@ export default function ParseMath(equation) {
 		operators.pop(highestOperatorIndex);
 	}
 	
-	return numbers.pop();
+	return Number(numbers.pop());
 }
 
-// console.log(ParseMath('3.2^(9 * (8 + 3))'));
-// console.log(ParseMath('3*6^2 - 5*6 + 3'));
-// console.log(ParseMath('3(6)^2 - 5(6) + 3'));
-// console.log(ParseMath('5 + sqrt(sqrt(5 * 6))'));
+module.exports = ParseMath;
