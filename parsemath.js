@@ -70,41 +70,27 @@ const CONSTANTS = {
 }
 let VARIABLES = CONSTANTS;
 
-const performCalculation = (number1, operator, number2 = 0) => {
-	switch (operator) {
-		case '^':
-			return number1**number2
-		case '*':
-			return number1*number2
-		case '/':
-			return number1/number2
-		case '+':
-			return number1+number2
-		case '-':
-			return number1-number2
-		case 'sqrt':
-			return Math.sqrt(number1)
-		case 'sin':
-			return Math.sin(number1)
-		case 'cos':
-			return Math.cos(number1)
-		case 'tan':
-			return Math.tan(number1)
-		case 'asin':
-			return Math.asin(number1)
-		case 'acos':
-			return Math.acos(number1)
-		case 'atan':
-			return Math.atan(number1)
-		case 'arcsin':
-			return Math.asin(number1)
-		case 'arccos':
-			return Math.acos(number1)
-		case 'arctan':
-			return Math.atan(number1)
-	}
+const OPERATORS = {
+	"^": (number1, number2) => number1**number2,
+	"*": (number1, number2) => number1*number2,
+	"/": (number1, number2) => number1/number2,
+	"+": (number1, number2) => number1+number2,
+	"-": (number1, number2) => number1-number2,
+	"sqrt": (number1, _) => Math.sqrt(number1),
+	"sin": (number1, _) => Math.sin(number1),
+	"cos": (number1, _) => Math.cos(number1),
+	"tan": (number1, _) => Math.tan(number1),
+	"asin": (number1, _) => Math.asin(number1),
+	"acos": (number1, _) => Math.acos(number1),
+	"atan": (number1, _) => Math.atan(number1),
+	"arcsin": (number1, _) => Math.asin(number1),
+	"arccos": (number1, _) => Math.acos(number1),
+	"arctan": (number1, _) => Math.atan(number1),
+}
 
-	return null;
+const performCalculation = (number1, operator, number2 = 0) => {
+	if (operator in OPERATORS) return OPERATORS[operator](number1, number2)
+	else return null;
 }
 
 // returns `false` if last letter is not letter, otherwise it returns all final of letters of string
@@ -140,6 +126,46 @@ const containsFinalString = firstPart => {
 	}
 }
 
+const letterIsPartOfFunction = (string, idx) => {
+	const originalIdx = idx;
+
+	let prevIsLetter = true;
+	let bracketFound = false;
+	let functionString = string.charAt(idx);
+
+	while (prevIsLetter && idx < string.length - 1) {
+		idx += 1;
+		if (!isLetter(string.charAt(idx))) {
+			prevIsLetter = false;
+			if (isBracket(string.charAt(idx))[0]) {
+				bracketFound = true;
+			} else return false
+		} else {
+			functionString += string.charAt(idx);
+		}
+	}
+
+	let nextIsLetter = true;
+	bracketFound = false;
+	idx = originalIdx;
+
+	while (nextIsLetter && idx > 0) {
+		idx -= 1;
+		if (!isLetter(string.charAt(idx))) {
+			nextIsLetter = false;
+		} else {
+			functionString = string.charAt(idx) + functionString;
+		}
+	}
+
+	if (!(functionString in OPERATORS)) {
+		// not an operator
+		return false
+	} else {
+		return true
+	}
+}
+
 const removeInnerBrackets = (equation, enableConstants, variables) => {
 	const equationValues = equation.split('');
 	let previousBracketValue = 0;
@@ -170,12 +196,13 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 	let firstPart = equation.substring(0, firstBracketIdx);
 	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
 
-	if (isInteger(firstPart.charAt(firstPart.length - 1))) {
+	if (isInteger(firstPart.charAt(firstPart.length - 1)) || (firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1))) {
 		// character before bracket is number, so implied multiplication
 		firstPart += '*';
 	} else if (containsFinalString(firstPart)) {
 		// operation to be done to contents of brackets
 		const operation = containsFinalString(firstPart);
+		console.log(operation);
 
 		firstPart = firstPart.substring(0, firstPart.length - operation.length);
 		extractedEquationResult = performCalculation(extractedEquationResult, operation);
@@ -259,13 +286,17 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 				prevItem = 'number';
 			} else if (equationValue === '.') {
 				pendingNumbers.push('.');
-			} else if (equationValue in VARIABLES) {
-				if ((idx === 0 || prevItem === 'operator') && (idx === equation.length - 1 || isOperator(equation.charAt(idx + 1)))) {
-					// is variable by itself
-					equationValue = VARIABLES[equationValue].toString();
-					numbers.push(equationValue);
-					prevItem = 'number';
+			} else if (equationValue in VARIABLES && !letterIsPartOfFunction(equation, idx)) {
+				// is a variable
+
+				if (idx !== 0 && prevItem === 'number') {
+					// e.g. 3e, values should be multiplied together
+					operators.push('*');
 				}
+
+				equationValue = VARIABLES[equationValue].toString();
+				numbers.push(equationValue);
+				prevItem = 'number';
 			}
 		}
 	});
@@ -297,5 +328,7 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 	const result = Number(numbers.pop());
 	return result;
 }
+
+console.log(Number(ParseMath('e(3)', true)));
 
 module.exports = ParseMath;

@@ -32,6 +32,10 @@ test('polynomial with different brackets', () => {
 	expect(ParseMath('3[6]^2 - 5(6) + 3')).toBe(81);
 });
 
+test('polynomial with variable', () => {
+	expect(ParseMath('3x^2 - 5x + 3', true, {"x": 6})).toBe(81);
+});
+
 test('very large power with brackets', () => {
 	expect(ParseMath('3.2^(9 * (8 + 3))')).toBe(1.02293456496755e+50);
 });
@@ -93,13 +97,29 @@ test('custom variables', () => {
 });
 
 test('raise to power of a negative', () => {
-	expect(Number(ParseMath('4^-2', true))).toBe(0.0625);
+	expect(Number(ParseMath('4^-2'))).toBe(0.0625);
 });
 
 test('raise to power of brackets', () => {
-	expect(Number(ParseMath('4^(e + 3)', true).toFixed(3))).toBe(2771.716);
+	expect(Number(ParseMath('4^(e + 3)').toFixed(3))).toBe(2771.716);
 });
 
 test('two variables in single bracket', () => {
-	expect(Number(ParseMath('4^(e + e)', true).toFixed(3))).toBe(1875.588);
+	expect(Number(ParseMath('4^(e + e)').toFixed(3))).toBe(1875.588);
+});
+
+test('multiplying variable by function', () => {
+	expect(Number(ParseMath('e * sin(0.2)').toFixed(3))).toBe(0.540);
+});
+
+test('multiple sequential variables', () => {
+	expect(ParseMath('px^2 + qx - r', false, {"p": 3, "x": 2, "q": 1, "r": -5})).toBe(19);
+});
+
+test('multiple sequential variables and constants', () => {
+	expect(Number(ParseMath('px^2 + qx - re', true, {"p": 3, "x": 2, "q": 1, "r": -5}).toFixed(3))).toBe(27.591);
+});
+
+test('treating constant as function', () => {
+	expect(Number(ParseMath('e(3)', true).toFixed(3))).toBe(8.155);
 });
