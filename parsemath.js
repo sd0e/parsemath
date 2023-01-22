@@ -85,6 +85,18 @@ const performCalculation = (number1, operator, number2 = 0) => {
 			return Math.cos(number1)
 		case 'tan':
 			return Math.tan(number1)
+		case 'asin':
+			return Math.asin(number1)
+		case 'acos':
+			return Math.acos(number1)
+		case 'atan':
+			return Math.atan(number1)
+		case 'arcsin':
+			return Math.asin(number1)
+		case 'arccos':
+			return Math.acos(number1)
+		case 'arctan':
+			return Math.atan(number1)
 	}
 
 	return null;
@@ -173,7 +185,6 @@ const removeInnerBrackets = equation => {
 	}
 
 	const fullResult = firstPart + extractedEquationResult + lastPart;
-	console.log(equation, fullResult);
 
 	return fullResult;
 }
@@ -260,5 +271,7 @@ function ParseMath(equation) {
 	
 	return Number(numbers.pop());
 }
+
+console.log(ParseMath('arcsin(0.2) + acos(0.4) + atan(0.6)'));
 
 module.exports = ParseMath;

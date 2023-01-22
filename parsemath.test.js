@@ -59,3 +59,15 @@ test('multiple sequential brackets with negative before', () => {
 test('multiple sequential brackets with square on final', () => {
 	expect(Number(ParseMath('5 + (9)(8)^2'))).toBe(581);
 });
+
+test('asin, acos and atan', () => {
+	expect(Number(ParseMath('asin(0.2) + acos(0.4) + atan(0.6)').toFixed(3))).toBe(1.901);
+});
+
+test('negative function', () => {
+	expect(Number(ParseMath('-asin(0.2)').toFixed(3))).toBe(-0.201);
+});
+
+test('arcsin, arccos and arctan', () => {
+	expect(Number(ParseMath('arcsin(0.2) + arccos(0.4) + arctan(0.6)').toFixed(3))).toBe(1.901);
+});
