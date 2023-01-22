@@ -8,6 +8,10 @@ test('negative addition', () => {
 	expect(ParseMath('-843 + -2.43')).toBe(-845.43);
 });
 
+test('numbers with multiple decimal places', () => {
+	expect(ParseMath('1.234 + 5.678')).toBe(6.912);
+});
+
 test('simple equation with multiple operators', () => {
 	expect(ParseMath('5 + 3 * 6 / 2')).toBe(14);
 });
@@ -81,5 +85,5 @@ test('custom variables', () => {
 });
 
 test('raise to power of a negative', () => {
-	expect(Number(ParseMath('4^-2))).toBe(0.0625);
+	expect(Number(ParseMath('4^-2'))).toBe(0.0625);
 });
