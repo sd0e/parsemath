@@ -4,7 +4,7 @@
   "description": "Evaluate mathematical expressions in JS",
   "main": "parsemath.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --collectCoverage"
   },
   "repository": {
     "type": "git",
