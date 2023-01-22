@@ -88,6 +88,10 @@ test('equation with multiple trigonometric equations', () => {
 	expect(Number(ParseMath('5*1-(sin(2)*tan(2))').toFixed(3))).toBe(6.987);
 });
 
+test('two trigonometric functions with implied multiplication', () => {
+	expect(Number(ParseMath('sin(0.5)cos(0.5)').toFixed(3))).toBe(0.421);
+});
+
 test('multiple sequential brackets', () => {
 	expect(Number(ParseMath('5 + (9)(8)'))).toBe(77);
 });

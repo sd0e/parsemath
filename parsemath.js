@@ -208,11 +208,8 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 		extractedEquationResult = performCalculation(extractedEquationResult, operation);
 	};
 
-	if (isInteger(lastPart.charAt(0))) {
-		// character after bracket is number, so implied multiplication
-		lastPart = '*' + lastPart;
-	} else if (lastPart.charAt(0) === '(') {
-		// character after bracket is another bracket, so multiply together
+	if (isInteger(lastPart.charAt(0)) || lastPart.charAt(0) === '(' || isLetter(lastPart.charAt(0))) {
+		// character after bracket is number, letter or bracket, so implied multiplication
 		lastPart = '*' + lastPart;
 	}
 
