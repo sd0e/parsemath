@@ -92,6 +92,14 @@ test('two trigonometric functions with implied multiplication', () => {
 	expect(Number(ParseMath('sin(0.5)cos(0.5)').toFixed(3))).toBe(0.421);
 });
 
+test('implied multiplication before trigonometric equation', () => {
+	expect(Number(ParseMath('3cos(0.5)').toFixed(3))).toBe(2.633);
+});
+
+test('two trigonometric functions with implied multiplication both before and after', () => {
+	expect(Number(ParseMath('3sin(0.5)cos(0.5)').toFixed(3))).toBe(1.262);
+});
+
 test('multiple sequential brackets', () => {
 	expect(Number(ParseMath('5 + (9)(8)'))).toBe(77);
 });
