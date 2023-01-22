@@ -16,6 +16,10 @@ test('simple equation with multiple operators', () => {
 	expect(ParseMath('5 + 3 * 6 / 2')).toBe(14);
 });
 
+test('multiply then square then multiply', () => {
+	expect(ParseMath('5 * 5 ^ 2 * 5')).toBe(625);
+});
+
 test('polynomial with no brackets', () => {
 	expect(ParseMath('3*6^2 - 5*6 + 3')).toBe(81);
 });
@@ -54,6 +58,10 @@ test('equation with multiple trigonometric equations', () => {
 
 test('multiple sequential brackets', () => {
 	expect(Number(ParseMath('5 + (9)(8)'))).toBe(77);
+});
+
+test('several sequential brackets', () => {
+	expect(Number(ParseMath('5 + (9)(8)(7)(6)'))).toBe(3029);
 });
 
 test('multiple sequential brackets with negative before', () => {
