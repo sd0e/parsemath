@@ -40,6 +40,14 @@ test('polynomial with variable in Greek alphabet', () => {
 	expect(ParseMath('3δ^2 - 5δ + 3', true, {"δ": 6})).toBe(81);
 });
 
+test('polynomial with both uppercase and lowercase variables', () => {
+	expect(ParseMath('3x^2 - 5X + 3', true, {"x": 6, "X": 4})).toBe(91);
+});
+
+test('polynomial with both uppercase and lowercase variables in Greek alphabet', () => {
+	expect(ParseMath('3δ^2 - 5Δ + 3', true, {"δ": 6, "Δ": 4})).toBe(91);
+});
+
 test('polynomial with decimal variable', () => {
 	expect(Number(ParseMath('3x^2 - 5x + 3', true, {"x": 6.2}).toFixed(2))).toBe(87.32);
 });
@@ -62,6 +70,10 @@ test('simple equation with trigonometry', () => {
 
 test('single cos trigonometric function', () => {
 	expect(Number(ParseMath('cos(2)').toFixed(3))).toBe(-0.416);
+});
+
+test('single cos trigonometric function with incorrect capitalization', () => {
+	expect(Number(ParseMath('Cos(2)').toFixed(3))).toBe(-0.416);
 });
 
 test('simple equation with negative trigonometry', () => {

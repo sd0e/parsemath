@@ -60,7 +60,7 @@ const brackets = {
 
 const isOperator = string => string in precedences;
 const isInteger = string => /^\d+$/.test(string);
-const isLetter = string => /[a-zα-ω]/.test(string);
+const isLetter = string => /[a-zA-Zα-ωΑ-Ω]/.test(string);
 const isBracket = string => string in brackets ? [true, brackets[string]] : [false, 0];
 
 const MAXIMUM_PRECEDENCE = 3;
@@ -89,6 +89,7 @@ const OPERATORS = {
 }
 
 const performCalculation = (number1, operator, number2 = 0) => {
+	operator = operator.toLowerCase();
 	if (operator in OPERATORS) return OPERATORS[operator](number1, number2)
 	else return null;
 }
@@ -158,7 +159,7 @@ const letterIsPartOfFunction = (string, idx) => {
 		}
 	}
 
-	if (!(functionString in OPERATORS)) {
+	if (!(functionString.toLowerCase() in OPERATORS)) {
 		// not an operator
 		return false
 	} else {
@@ -201,8 +202,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 		firstPart += '*';
 	} else if (containsFinalString(firstPart)) {
 		// operation to be done to contents of brackets
-		const operation = containsFinalString(firstPart);
-		console.log(operation);
+		let operation = containsFinalString(firstPart);
 
 		firstPart = firstPart.substring(0, firstPart.length - operation.length);
 		extractedEquationResult = performCalculation(extractedEquationResult, operation);
@@ -225,7 +225,6 @@ const containsBracket = equation => /[\(\)\[\]]/g.test(equation);
 
 // for example, equation is 5 * 6 / 7 + 8
 function ParseMath(equation, enableConstants = true, variables = null) {
-	equation = equation.toLowerCase();
 	equation = equation.replace(/\s/g, '');
 
 	// update variables
