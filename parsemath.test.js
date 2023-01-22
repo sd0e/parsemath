@@ -79,3 +79,7 @@ test('single variable by itself in equation', () => {
 test('custom variables', () => {
 	expect(Number(ParseMath('3 * (x / 2)', false, {"x": 4}))).toBe(6);
 });
+
+test('raise to power of a negative', () => {
+	expect(Number(ParseMath('4^-2))).toBe(0.0625);
+});
