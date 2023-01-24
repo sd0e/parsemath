@@ -14,6 +14,11 @@ A JavaScript library which parses an equation in string format to a number.
 * Evaluate mathematical expressions involving the mathematical constants `e` and `π` (the `enableConstants` parameter must be set to true for this to work)
 * Evaluate mathematical expressions involving variables in the Roman and Greek alphabets
 
+## Certain things that are known to not work
+(This is not an exhaustive list)
+* Placing a number or variable immediately before a function (e.g. `8cos(0.5)`)
+* Modulus brackets (`|`)
+
 ## Usage
 The function accepts the following arguments in their respective order:
 * **equation** (*string*): the equation to be parsed
