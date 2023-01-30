@@ -10,7 +10,7 @@ A JavaScript library which parses an equation in string format to a number.
 
 ## Current abilities
 * Evaluate mathematical expressions with the following operators: `^`, `*`, `/`, `+`, `-`
-* Evaluate mathematical expressions with the following operators containing a number inside the brackets, with **trigonometric values represented in radians**: `sqrt()`, `sin()`, `cos()`, `tan()`
+* Evaluate mathematical expressions with the following operators containing a number inside the brackets, with **trigonometric values represented in radians**: `sqrt()`, `sin()`, `cos()`, `tan()`, `asin()`, `acos()`, `atan()`
 * Evaluate mathematical expressions with brackets
 * Evaluate mathematical expressions containing multi-digit positive and negative integers and floats
 * Evaluate mathematical expressions involving the mathematical constants `e` and `π` (the `enableConstants` parameter must be set to true for this to work)
