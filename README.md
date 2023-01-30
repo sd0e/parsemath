@@ -10,7 +10,7 @@ A JavaScript library which parses an equation in string format to a number.
 
 ## Current abilities
 * Evaluate mathematical expressions with the following operators: `^`, `*`, `/`, `+`, `-`
-* Evaluate mathematical expressions with the following operators containing a number inside the brackets, with **trigonometric values represented in radians**: `sqrt()`, `sin()`, `cos()`, `tan()`, `asin()`, `acos()`, `atan()`
+* Evaluate mathematical expressions with the following operators containing a number inside the brackets, with **trigonometric values represented in radians**: `sqrt()`, `sin()`, `cos()`, `tan()`, `asin()`, `acos()`, `atan()`, `abs()`
 * Evaluate mathematical expressions with brackets
 * Evaluate mathematical expressions containing multi-digit positive and negative integers and floats
 * Evaluate mathematical expressions involving the mathematical constants `e` and `π` (the `enableConstants` parameter must be set to true for this to work)
@@ -19,7 +19,7 @@ A JavaScript library which parses an equation in string format to a number.
 ## Certain things that are known to not work
 (This is not an exhaustive list)
 * Placing a number or variable immediately before a function (e.g. `8cos(0.5)`)
-* Modulus brackets (`|`)
+* Modulus brackets (`|`) (please instead use `abs()`)
 
 ## Usage
 The function accepts the following arguments in their respective order:

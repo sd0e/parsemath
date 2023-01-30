@@ -191,3 +191,11 @@ test('multiple sequential variables with implied multiplication', () => {
 test('raised to power inside function', () => {
 	expect(Number(ParseMath('tan((x+1)^2)', false, {"x": 5}).toFixed(3))).toBe(7.750);
 });
+
+test('absolute value', () => {
+	expect(ParseMath('abs(-30+2)', false, {"x": -10})).toBe(28);
+});
+
+test('absolute value with variable', () => {
+	expect(ParseMath('abs(3x+2)', false, {"x": -10})).toBe(28);
+});

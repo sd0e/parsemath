@@ -86,6 +86,7 @@ const OPERATORS = {
 	"arcsin": (number1, _) => Math.asin(number1),
 	"arccos": (number1, _) => Math.acos(number1),
 	"arctan": (number1, _) => Math.atan(number1),
+	"abs": (number1, _) => Math.abs(number1),
 }
 
 const performCalculation = (number1, operator, number2 = 0) => {
