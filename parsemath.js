@@ -208,12 +208,12 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 		firstPart = firstPart.substring(0, firstPart.length - operation.length);
 		extractedEquationResult = performCalculation(extractedEquationResult, operation);
 
-		if (isInteger(firstPart.charAt(firstPart.length - 1)) || (firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1))) {
+		if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1))) {
 			firstPart += '*'
 		}
 	};
 
-	if (isInteger(lastPart.charAt(0)) || lastPart.charAt(0) === '(' || isLetter(lastPart.charAt(0))) {
+	if (isInteger(lastPart.charAt(0)) || lastPart.charAt(0) === '(' || lastPart.charAt(0) === '[' || isLetter(lastPart.charAt(0))) {
 		// character after bracket is number, letter or bracket, so implied multiplication
 		lastPart = '*' + lastPart;
 	}

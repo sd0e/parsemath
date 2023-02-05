@@ -199,3 +199,7 @@ test('absolute value', () => {
 test('absolute value with variable', () => {
 	expect(ParseMath('abs(3x+2)', false, {"x": -10})).toBe(28);
 });
+
+test('squaring result of a function', () => {
+	expect(Number(ParseMath('5(sqrt(π * 2^2)^3+3)').toFixed(3))).toBe(237.733);
+});
