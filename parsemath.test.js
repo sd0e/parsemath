@@ -203,3 +203,7 @@ test('absolute value with variable', () => {
 test('squaring result of a function', () => {
 	expect(Number(ParseMath('5(sqrt(π * 2^2)^3+3)').toFixed(3))).toBe(237.733);
 });
+
+test('implied multiplication and squaring results of functions', () => {
+	expect(Number(ParseMath('8eπ(3^2-5(sqrt(π * abs(-2)^2)^3+3))').toFixed(3))).toBe(-15626.560);
+});

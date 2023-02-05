@@ -198,7 +198,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 	let firstPart = equation.substring(0, firstBracketIdx);
 	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
 
-	if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1))) {
+	if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1) && !isOperator(firstPart.charAt(firstPart.length - 1)))) {
 		// character before bracket is number, so implied multiplication
 		firstPart += '*';
 	} else if (containsFinalString(firstPart)) {
@@ -208,7 +208,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 		firstPart = firstPart.substring(0, firstPart.length - operation.length);
 		extractedEquationResult = performCalculation(extractedEquationResult, operation);
 
-		if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1))) {
+		if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1) && !isOperator(firstPart.charAt(firstPart.length - 1)))) {
 			firstPart += '*'
 		}
 	};
