@@ -84,6 +84,10 @@ test('simple equation with negative trigonometry', () => {
 	expect(Number(ParseMath('sin(-2) + 1').toFixed(3))).toBe(0.091);
 });
 
+test('simple equation with negative trigonometry in degrees', () => {
+	expect(Number(ParseMath('sin(-2) + 1', true, null, 'deg').toFixed(3))).toBe(0.965);
+});
+
 test('equation with multiple trigonometric equations', () => {
 	expect(Number(ParseMath('5*1-(sin(2)*tan(2))').toFixed(3))).toBe(6.987);
 });
@@ -92,12 +96,24 @@ test('two trigonometric functions with implied multiplication', () => {
 	expect(Number(ParseMath('sin(0.5)cos(0.5)').toFixed(3))).toBe(0.421);
 });
 
+test('two trigonometric functions with implied multiplication in degrees', () => {
+	expect(Number(ParseMath('sin(60)cos(30)', true, null, 'deg').toFixed(3))).toBe(0.750);
+});
+
 test('implied multiplication before trigonometric equation', () => {
 	expect(Number(ParseMath('3cos(0.5)').toFixed(3))).toBe(2.633);
 });
 
 test('two trigonometric functions with implied multiplication both before and after', () => {
 	expect(Number(ParseMath('3sin(0.5)cos(0.5)').toFixed(3))).toBe(1.262);
+});
+
+test('arcsin in degrees', () => {
+	expect(Number(ParseMath('asin(-0.75)', true, null, 'deg').toFixed(3))).toBe(-48.590);
+});
+
+test('multiple nested trigonometric functions in degrees', () => {
+	expect(Number(ParseMath('sin(arccos(0.5) + 1)', true, null, 'deg').toFixed(3))).toBe(0.875);
 });
 
 test('three sequential functions', () => {

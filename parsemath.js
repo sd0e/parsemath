@@ -77,21 +77,21 @@ const OPERATORS = {
 	"+": (number1, number2) => number1+number2,
 	"-": (number1, number2) => number1-number2,
 	"sqrt": (number1, _) => Math.sqrt(number1),
-	"sin": (number1, _) => Math.sin(number1),
-	"cos": (number1, _) => Math.cos(number1),
-	"tan": (number1, _) => Math.tan(number1),
-	"asin": (number1, _) => Math.asin(number1),
-	"acos": (number1, _) => Math.acos(number1),
-	"atan": (number1, _) => Math.atan(number1),
-	"arcsin": (number1, _) => Math.asin(number1),
-	"arccos": (number1, _) => Math.acos(number1),
-	"arctan": (number1, _) => Math.atan(number1),
+	"sin": (number1, _, angleMode) => angleMode === 'rad' ? Math.sin(number1) : Math.sin(number1 * Math.PI / 180),
+	"cos": (number1, _, angleMode) => angleMode === 'rad' ? Math.cos(number1) : Math.cos(number1 * Math.PI / 180),
+	"tan": (number1, _, angleMode) => angleMode === 'rad' ? Math.tan(number1) : Math.tan(number1 * Math.PI / 180),
+	"asin": (number1, _, angleMode) => angleMode === 'rad' ? Math.asin(number1) : Math.asin(number1) * 180 / Math.PI,
+	"acos": (number1, _, angleMode) => angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI,
+	"atan": (number1, _, angleMode) => angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI,
+	"arcsin": (number1, _, angleMode) => angleMode === 'rad' ? Math.asin(number1) : Math.asin(number1) * 180 / Math.PI,
+	"arccos": (number1, _, angleMode) => angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI,
+	"arctan": (number1, _, angleMode) => angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI,
 	"abs": (number1, _) => Math.abs(number1),
 }
 
-const performCalculation = (number1, operator, number2 = 0) => {
+const performCalculation = (number1, operator, number2 = 0, angleMode) => {
 	operator = operator.toLowerCase();
-	if (operator in OPERATORS) return OPERATORS[operator](number1, number2)
+	if (operator in OPERATORS) return OPERATORS[operator](number1, number2, angleMode)
 	else return null;
 }
 
@@ -168,7 +168,7 @@ const letterIsPartOfFunction = (string, idx) => {
 	}
 }
 
-const removeInnerBrackets = (equation, enableConstants, variables) => {
+const removeInnerBrackets = (equation, enableConstants, variables, angleMode) => {
 	const equationValues = equation.split('');
 	let previousBracketValue = 0;
 	let maxDepth = -1;
@@ -193,7 +193,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 	});
 
 	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
-	let extractedEquationResult = ParseMath(extractedEquation, enableConstants, variables);
+	let extractedEquationResult = ParseMath(extractedEquation, enableConstants, variables, angleMode);
 
 	let firstPart = equation.substring(0, firstBracketIdx);
 	let lastPart = equation.substring(lastBracketIdx + 1, equation.length);
@@ -206,7 +206,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 		let operation = containsFinalString(firstPart);
 
 		firstPart = firstPart.substring(0, firstPart.length - operation.length);
-		extractedEquationResult = performCalculation(extractedEquationResult, operation);
+		extractedEquationResult = performCalculation(extractedEquationResult, operation, null, angleMode);
 
 		if (isInteger(firstPart.charAt(firstPart.length - 1)) || (brackets[firstPart.charAt(firstPart.length - 1)] !== 1 && firstPart.charAt(firstPart.length - 1) && !letterIsPartOfFunction(firstPart, firstPart.length - 1) && !isOperator(firstPart.charAt(firstPart.length - 1)))) {
 			firstPart += '*'
@@ -226,7 +226,7 @@ const removeInnerBrackets = (equation, enableConstants, variables) => {
 const containsBracket = equation => /[\(\)\[\]]/g.test(equation);
 
 // for example, equation is 5 * 6 / 7 + 8
-function ParseMath(equation, enableConstants = true, variables = null) {
+function ParseMath(equation, enableConstants = true, variables = null, angleMode = 'rad') {
 	equation = equation.replace(/\s/g, '');
 
 	// update variables
@@ -246,7 +246,7 @@ function ParseMath(equation, enableConstants = true, variables = null) {
 	}
 
 	while (containsBracket(equation)) {
-		equation = removeInnerBrackets(equation, enableConstants, variables);
+		equation = removeInnerBrackets(equation, enableConstants, variables, angleMode);
 	}
 
 	const equationValues = equation.split('');
