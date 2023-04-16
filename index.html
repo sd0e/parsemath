@@ -7,6 +7,32 @@
 		<link rel="stylesheet" href="https://latex.now.sh/style.min.css" />
 	</head>
 	<body>
+		<script>
+			window.newRowHtml = `
+				<div class="row">
+					<div class="col">
+						<input type="text" placeholder="Variable Name" class="form-control" />
+					</div>
+					<div class="col-2">
+						<input type="text" placeholder="Variable Value" class="form-control" />
+					</div>
+				</div>
+			`
+			
+			window.submit = () => {
+				let submissionVariables = {};
+				
+				const variables = document.getElementById('variables').children;
+				for (var i = 0; i < variables.length; i++) {
+					const variable = variables[i];
+					const name = variable.firstChild.firstChild.value;
+					const value = Number(variable.lastChild.firstChild.value);
+					submissionVariables[name] = value;
+				}
+				
+				document.getElementById('result').innerText = ParseMath(document.getElementById('math-input').value, true, submissionVariables);
+			}
+		</script>
 		<h1>parsemath Equation Tester</h1>
 		<div class="container">
 			<div class="row">
@@ -14,13 +40,16 @@
 					<input type="text" placeholder="Input any valid Math string" id="math-input" class="form-control" />
 				</div>
 				<div class="col-md-auto">
-					<button type="button" class="btn btn-warning" onClick="document.getElementById('result').innerText = ParseMath(document.getElementById('math-input').value)">Submit</button>
+					<button type="button" class="btn btn-warning" onClick="window.submit();">Submit</button>
 				</div>
 			</div>
 		</div>
-		<div class="container" id="variables">
+		<div class="container">
 			<div class="row">
-				<button type="button" class="btn btn-secondary" onClick="document.getElementById('variables').insertAdjacentHTML('beforeend', '<div class=\"row\"></div>')">Add Variable</button>
+				<button type="button" class="btn btn-secondary" onClick="document.getElementById('variables').insertAdjacentHTML('beforeend', window.newRowHtml)">Add Variable</button>
+			</div>
+			<div id="variables">
+				
 			</div>
 		</div>
 		<br />
