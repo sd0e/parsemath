@@ -8,12 +8,14 @@
 	</head>
 	<body>
 		<h1>parsemath Equation Tester</h1>
-		<div class="row">
-			<div class="col-4">
-				<input type="text" placeholder="Input any valid Math string" id="math-input" class="form-control" />
-			</div>
-			<div class="col">
-				<button type="button" class="btn btn-warning" onClick="document.getElementById('result').innerText = ParseMath(document.getElementById('math-input').value)">Submit</button>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<input type="text" placeholder="Input any valid Math string" id="math-input" class="form-control" />
+				</div>
+				<div class="col-md-auto">
+					<button type="button" class="btn btn-warning" onClick="document.getElementById('result').innerText = ParseMath(document.getElementById('math-input').value)">Submit</button>
+				</div>
 			</div>
 		</div>
 		<br />
