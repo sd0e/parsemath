@@ -87,6 +87,8 @@ const OPERATORS = {
 	"arccos": (number1, _, angleMode) => angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI,
 	"arctan": (number1, _, angleMode) => angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI,
 	"abs": (number1, _) => Math.abs(number1),
+	"ln": (number1, _) => Math.log(number1),
+	"log": (number1, number2) => Math.getBaseLog(number1, number2)
 }
 
 const performCalculation = (number1, operator, number2 = 0, angleMode) => {
