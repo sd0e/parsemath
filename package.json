@@ -1,8 +1,8 @@
 {
   "name": "parsemath",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Evaluate mathematical expressions in JS",
-  "main": "parsemath.js",
+  "main": "parsemath.min.js",
   "scripts": {
     "test": "jest --collectCoverage"
   },

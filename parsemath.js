@@ -73,27 +73,46 @@ let VARIABLES = CONSTANTS;
 const OPERATORS = {
 	"^": (number1, number2) => number1**number2,
 	"*": (number1, number2) => number1*number2,
-	"/": (number1, number2) => number1/number2,
+	"/": (number1, number2) => {
+		if (number2 === 0) throw new Error('Division by zero error');
+		return number1/number2
+	},
 	"+": (number1, number2) => number1+number2,
 	"-": (number1, number2) => number1-number2,
 	"sqrt": (number1, _) => Math.sqrt(number1),
 	"sin": (number1, _, angleMode) => angleMode === 'rad' ? Math.sin(number1) : Math.sin(number1 * Math.PI / 180),
 	"cos": (number1, _, angleMode) => angleMode === 'rad' ? Math.cos(number1) : Math.cos(number1 * Math.PI / 180),
 	"tan": (number1, _, angleMode) => angleMode === 'rad' ? Math.tan(number1) : Math.tan(number1 * Math.PI / 180),
-	"asin": (number1, _, angleMode) => angleMode === 'rad' ? Math.asin(number1) : Math.asin(number1) * 180 / Math.PI,
-	"acos": (number1, _, angleMode) => angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI,
-	"atan": (number1, _, angleMode) => angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI,
-	"arcsin": (number1, _, angleMode) => angleMode === 'rad' ? Math.asin(number1) : Math.asin(number1) * 180 / Math.PI,
-	"arccos": (number1, _, angleMode) => angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI,
-	"arctan": (number1, _, angleMode) => angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI,
+	"asin": (number1, _, angleMode) => {
+		if (number1 < -1 || number1 > 1) throw new Error('Trigonometric error: asin value not in domain');
+		return angleMode === 'rad' ? Math.asin(number1) : Math.asin(number1) * 180 / Math.PI
+	},
+	"acos": (number1, _, angleMode) => {
+		if (number1 < -1 || number1 > 1) throw new Error('Trigonometric error: acos value not in domain');
+		return angleMode === 'rad' ? Math.acos(number1) : Math.acos(number1) * 180 / Math.PI
+	},
+	"atan": (number1, _, angleMode) => {
+		return angleMode === 'rad' ? Math.atan(number1) : Math.atan(number1) * 180 / Math.PI
+	},
+	"arcsin": (number1, _, angleMode) => OPERATORS["asin"](number1, _, angleMode),
+	"arccos": (number1, _, angleMode) => OPERATORS["acos"](number1, _, angleMode),
+	"arctan": (number1, _, angleMode) => OPERATORS["atan"](number1, _, angleMode),
 	"abs": (number1, _) => Math.abs(number1),
-	"ln": (number1, _) => Math.log(number1),
-	"log": (number1, number2) => Math.getBaseLog(number1, number2)
+	"ln": (number1, _) => {
+		if (number1 <= 0) throw new Error('Logarithm error: value not in domain')
+		return Math.log(number1)
+	}
 }
 
 const performCalculation = (number1, operator, number2 = 0, angleMode) => {
+	if (isNaN(number1) || isNaN(number2)) {
+		throw new Error('Syntax error: performing an operation on a NaN type')
+	}
+
 	operator = operator.toLowerCase();
-	if (operator in OPERATORS) return OPERATORS[operator](number1, number2, angleMode)
+	if (operator in OPERATORS) {
+		return OPERATORS[operator](number1, number2, angleMode);
+	}
 	else return null;
 }
 
@@ -194,7 +213,16 @@ const removeInnerBrackets = (equation, enableConstants, variables, angleMode) =>
 		}
 	});
 
+	if (lastBracketIdx === -1) {
+		throw new Error('Bracket error: imbalanced brackets');
+	}
+
 	const extractedEquation = equation.substring(firstBracketIdx + 1, lastBracketIdx);
+
+	if (extractedEquation === '') {
+		throw new Error('Bracket error: no expression within brackets');
+	}
+
 	let extractedEquationResult = ParseMath(extractedEquation, enableConstants, variables, angleMode);
 
 	let firstPart = equation.substring(0, firstBracketIdx);
@@ -304,6 +332,8 @@ function ParseMath(equation, enableConstants = true, variables = null, angleMode
 				equationValue = VARIABLES[equationValue].toString();
 				numbers.push(equationValue);
 				prevItem = 'number';
+			} else {
+				throw new Error('Syntax error: Variable \'' + equationValue + '\' not defined');
 			}
 		}
 	});
