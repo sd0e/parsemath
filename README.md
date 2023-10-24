@@ -6,7 +6,7 @@
 
 > Not related to npm package of same name
 
-A JavaScript library which parses an equation in string format to a number.
+A JavaScript library which parses an equation in string format to a number. It skips the traditional method of generating a syntax tree, instead evaluating the expression from the inside directly through a recursive method, resulting in code which often executes much more quickly than others (and sometimes orders of magnitude faster). This speed does not come at the cost of more advanced features; it supports implicit multiplication, multiple units of angles, and multiple custom variables.
 
 ## Current abilities
 * Evaluate mathematical expressions with the following operators: `^`, `*`, `/`, `+`, `-`
