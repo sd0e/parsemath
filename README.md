@@ -2,7 +2,7 @@
 
 [![View coverage report image](https://img.shields.io/badge/view%20coverage%20report-click-informational)](https://git.sebdoe.com/parsemath/coverage/lcov-report/)
 
-> Disclaimer: I am not an expert in number parsing and this library has not been extensively tested, so do not use this library if reliability is important. **I do not hold any liability if this code does not work as expected.**
+> Disclaimer: I am not an expert in number parsing and, although many unit tests are in place for this library, I cannot confirm that it will work for all use cases, so do not use this library if reliability is important. **I do not hold any liability if this code does not work as expected.**
 
 > Not related to npm package of same name
 
